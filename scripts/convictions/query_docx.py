@@ -121,7 +121,7 @@ queries = [
 
 
 def answer_query_for_each_doc(embeddings) -> None:
-    doc_directory = "../../data/convictions"  # Update the directory path accordingly
+    doc_directory = "../../data/convictions/testimony"  # Update the directory path accordingly
 
     for file_name in os.listdir(doc_directory):
         if file_name.endswith(".docx"):

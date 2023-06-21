@@ -126,7 +126,7 @@ def convert_pdfs_to_text_doc(pdf_directory, start_page=0, end_page=None, batch_s
             logger.error(f"Error converting {pdf_file}: {str(e)}")
 
 # Usage example
-pdf_directory = "../../data/convictions/archive"
+pdf_directory = "../../data/convictions"
 start_page = 0  # Start processing from page 1
 end_page = None  # Process up to page 10 (modify as needed)
 batch_size = 10
