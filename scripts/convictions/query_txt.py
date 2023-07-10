@@ -9,6 +9,9 @@ from langchain import PromptTemplate
 from dotenv import find_dotenv, load_dotenv
 import textwrap
 import csv
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import LLMChain, HypotheticalDocumentEmbedder
+from langchain.llms import OpenAI
 
 load_dotenv(find_dotenv())
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
@@ -20,12 +23,34 @@ logger = logging.getLogger(__name__)
 
 query_memory = []
 
+
+def generate_hyde():
+    llm = OpenAI()
+    prompt_template = """
+    You're a criminal justice researcher focusing on the names and context of mention of law enforcement personnel, including police officers, detectives, homicide units, and crime lab personnel, as described in trial transcripts. Be aware that the titles "Detective" and "Officer" might be used interchangeably.
+
+    Question: {question}
+
+    Roles and Responses:"""
+    prompt = PromptTemplate(input_variables=["question"], template=prompt_template)
+
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
+
+    base_embeddings = OpenAIEmbeddings()
+
+    embeddings = HypotheticalDocumentEmbedder(
+        llm_chain=llm_chain, base_embeddings=base_embeddings
+    )
+    return embeddings
+
+
 class Document:
     def __init__(self, page_content, metadata):
         self.page_content = page_content
         self.metadata = metadata
 
-def create_db_from_text_files(text_directory) -> FAISS:
+
+def create_db_from_text_files(text_directory, embeddings) -> FAISS:
     all_docs = []
     for file_name in os.listdir(text_directory):
         if file_name.endswith(".txt"):
@@ -39,7 +64,7 @@ def create_db_from_text_files(text_directory) -> FAISS:
 
             for line in lines:
                 doc_content = line.strip()
-                doc = Document(page_content=doc_content, metadata={'source': file_path})
+                doc = Document(page_content=doc_content, metadata={"source": file_path})
                 all_docs.append(doc)
 
     db = FAISS.from_documents(all_docs, embeddings)
@@ -48,9 +73,13 @@ def create_db_from_text_files(text_directory) -> FAISS:
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
-    db.save_local(os.path.join(cache_dir, "faiss_index"))
+    faiss_index_path = os.path.join(
+        cache_dir, f"faiss_index_{os.path.basename(file_path)}"
+    )
+    db.save_local(faiss_index_path)
+
     logger.info("Combined database created from all text files")
-    return db
+    return db, faiss_index_path
 
 
 def get_response_from_query(db, query, k=3):
@@ -67,7 +96,7 @@ def get_response_from_query(db, query, k=3):
     prompt = PromptTemplate(
         input_variables=["question", "docs"],
         template="""
-        As an AI assistant, my task is to provide the names of each law enforcement individual named in the trial transcript:
+        As an AI assistant, my task is to extract the names and context of mention for each law enforcement individual, including police officers, detectives, homicide units, and crime lab personnel named in the trial transcript. Be aware that the titles "Detective" and "Officer" might be used interchangeably:
 
         Query: {question}
 
@@ -75,57 +104,66 @@ def get_response_from_query(db, query, k=3):
 
         Here's what you can expect in the response:
 
-        1. The first and/or last of individuals who have the title "Officer", "Detective", "Det.", "Homicide Detective", "Sergeant", or "Captain". These are all police officers.
-        2. Name each police officer 
-        3. Describe the role of each police officer
+        1. The name of a law enforcement personnel, including a police officer, police witnesses, detective, homicide deputies, lieutenant, sergeant, captain, crime lab personnel, and homicide officers. Please prefix the name with "Officer Name: ". 
+        2. Provide the context or the reason for the identified person. Please prefix the name with "Officer Context: ". 
+        3. Continue this pattern, for each officer and each context, until all law enforcement personnel are identified.
 
         Guidelines for the AI assistant:
 
-        - Only derive responses from factual information found within the transcript.
-        - Provide as much detail as the transcript allows.
+        - Derive responses from factual information found within the transcript.
+        - If the context of an identified person's mention is not clear in the transcript, provide their name and note that the context is not specified.
         - If there is insufficient information to answer the query, simply respond with "Insufficient information to answer the query".
     """,
     )
 
-
     chain = LLMChain(llm=llm, prompt=prompt)
     response = chain.run(question=query, docs=docs_page_content)
-    response = response.replace("\n", "")
+    response = response.replace(" ", "\n")
     return response, docs
 
 
-def answer_query(query: str, embeddings) -> str:
-    text_directory = "../../data/convictions"  # Update the directory path accordingly
-
-    faiss_index_path = "cache/faiss_index"
-    if os.path.exists(faiss_index_path):
-        db = FAISS.load_local(faiss_index_path, embeddings)
-        logger.info("Loaded database from faiss_index")
-    else:
-        db = create_db_from_text_files(text_directory)
-
-    response, _ = get_response_from_query(db, query)
-
-    # Save the data to a CSV file
-    with open("../../data/convictions/output_txt.csv", mode="w", encoding="utf-8", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["response"])
-        writer.writerow([response])
-
-    print("Bot response:")
-    print(textwrap.fill(response, width=85))
-    print()
-
-    query_memory.append(query)
-    return response
+queries = [
+    "Enumerate all law enforcement personnel, including police officers, detectives, homicide officers, and crime lab personnel from the transcript and provide the context of their mention, if available.",
+    "Can you list all individuals related to law enforcement such as police officers, detectives, homicide units, and crime lab personnel mentioned in the transcript and elaborate on the context of their mention?",
+    "Please produce a roster of all persons involved with law enforcement, including police officers, detectives, homicide units, crime lab personnel from the transcript and explain why they are mentioned, if stated.",
+    "Identify all the law enforcement entities, notably police officers, detectives, homicide units, crime lab personnel, stated in the transcript and describe the reason for their mention, if specified.",
+    "Could you outline all individuals from law enforcement, especially police officers, detectives, homicide units, crime lab personnel, referenced in the transcript and their context of mention, if defined?",
+    "Please pinpoint all law enforcement associates, mainly police officers, detectives, homicide units, crime lab personnel, cited in the transcript and specify their mention context, if outlined.",
+]
 
 
-while True:
-    query = input("Enter your query (or 'quit' to exit): ")
-    if query == "quit":
-        break
+def answer_query_for_each_doc(embeddings) -> None:
+    doc_directory = (
+        r"../../data/convictions/v1/testimony"  # Update the directory path accordingly
+    )
 
-    response = answer_query(query, embeddings)  # Pass the 'embeddings' argument
+    for file_name in os.listdir(doc_directory):
+        if file_name.endswith(".txt"):
+            file_path = os.path.join(doc_directory, file_name)
+            output_data = {}
 
-print("Query memory:")
-print(query_memory)
+            faiss_index_path = "cache/faiss_index_" + file_name
+            if os.path.exists(faiss_index_path):
+                db = FAISS.load_local(faiss_index_path, embeddings)
+                logger.info(f"Loaded database from {faiss_index_path}")
+            else:
+                db, faiss_index_path = create_db_from_text_files(
+                    doc_directory, embeddings
+                )  # Pass doc_directory
+
+            for query in queries:
+                response, _ = get_response_from_query(db, query)
+                output_data[query] = response
+
+                print("Bot response for query: ", query)
+                print(textwrap.fill(response, width=85))
+                print()
+
+
+def main():
+    embeddings = generate_hyde()
+    answer_query_for_each_doc(embeddings)
+
+
+if __name__ == "__main__":
+    main()

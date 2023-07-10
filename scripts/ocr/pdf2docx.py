@@ -19,10 +19,11 @@ from skimage.util import img_as_ubyte
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def preprocess_pdf(file_path, start_page=0, end_page=None, dpi=300):
     # Initialize the PDF file reader
-    pdf = PdfFileReader(open(file_path, 'rb'))
-    
+    pdf = PdfFileReader(open(file_path, "rb"))
+
     # Get the number of pages
     num_pages = pdf.getNumPages()
 
@@ -34,7 +35,9 @@ def preprocess_pdf(file_path, start_page=0, end_page=None, dpi=300):
     text = ""
     for page_num in range(start_page, end_page):
         # Convert the page to an image
-        image = convert_from_path(file_path, dpi=dpi, first_page=page_num + 1, last_page=page_num + 1)[0]
+        image = convert_from_path(
+            file_path, dpi=dpi, first_page=page_num + 1, last_page=page_num + 1
+        )[0]
 
         # Convert the PIL image to OpenCV format (numpy array)
         img_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
@@ -43,18 +46,21 @@ def preprocess_pdf(file_path, start_page=0, end_page=None, dpi=300):
         processed_image = preprocess_image(img_cv)
 
         # Convert the processed image back to PIL format
-        processed_image_pil = Image.fromarray(cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB))
+        processed_image_pil = Image.fromarray(
+            cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB)
+        )
 
         # Extract text from the image using Tesseract OCR
-        extracted_text = pytesseract.image_to_string(processed_image_pil, lang='eng')
+        extracted_text = pytesseract.image_to_string(processed_image_pil, lang="eng")
         text += extracted_text + "\n"
-    
+
     return text
+
 
 def preprocess_image(image):
     # Convert image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
+
     # Apply adaptive thresholding to convert the image to binary
     _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
@@ -76,9 +82,10 @@ def preprocess_image(image):
         else:
             angle = -angle
         return angle
+
     skew_angle = compute_skew(denoised)
-    deskewed = rotate(denoised, skew_angle, mode='reflect')
-    
+    deskewed = rotate(denoised, skew_angle, mode="reflect")
+
     # Convert image back to uint8 format
     deskewed = img_as_ubyte(deskewed)
 
@@ -87,31 +94,40 @@ def preprocess_image(image):
 
 def sanitize_text(text):
     # Remove control characters and NULL bytes from the text
-    sanitized_text = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]', '', text)
+    sanitized_text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]", "", text)
 
     # Add additional text sanitization techniques here if needed
     # For example, remove excessive spaces, line breaks, or special characters
-    sanitized_text = re.sub(r'\s+', ' ', sanitized_text)
+    sanitized_text = re.sub(r"\s+", " ", sanitized_text)
     return sanitized_text.strip()
 
-def convert_pdfs_to_text_doc(pdf_directory, start_page=0, end_page=None, batch_size=10, dpi=300):
+
+def convert_pdfs_to_text_doc(
+    pdf_directory, start_page=0, end_page=None, batch_size=10, dpi=300
+):
     # Create a list of PDF files in the directory
-    pdf_files = [f for f in os.listdir(pdf_directory) if f.endswith('.pdf')]
+    pdf_files = [f for f in os.listdir(pdf_directory) if f.endswith(".pdf")]
 
     # Loop through each PDF file and convert it to a text-readable document
     for pdf_file in pdf_files:
         # Construct the paths for input and output files
         input_path = os.path.join(pdf_directory, pdf_file)
-        output_path = os.path.join(pdf_directory, f'{os.path.splitext(pdf_file)[0]}.docx')
+        output_path = os.path.join(
+            pdf_directory, f"{os.path.splitext(pdf_file)[0]}.docx"
+        )
 
         try:
             # Check if the output file already exists
             if os.path.exists(output_path):
-                logger.info(f"Skipping {pdf_file} because {os.path.basename(output_path)} already exists")
+                logger.info(
+                    f"Skipping {pdf_file} because {os.path.basename(output_path)} already exists"
+                )
                 continue
 
             # Preprocess the PDF to make it OCRable
-            text = preprocess_pdf(input_path, start_page=start_page, end_page=end_page, dpi=dpi)
+            text = preprocess_pdf(
+                input_path, start_page=start_page, end_page=end_page, dpi=dpi
+            )
 
             # Sanitize the extracted text
             sanitized_text = sanitize_text(text)
@@ -125,11 +141,18 @@ def convert_pdfs_to_text_doc(pdf_directory, start_page=0, end_page=None, batch_s
         except Exception as e:
             logger.error(f"Error converting {pdf_file}: {str(e)}")
 
+
 # Usage example
-pdf_directory = "../../data/convictions"
+pdf_directory = "../../data/convictions/evaluate/reports"
 start_page = 0  # Start processing from page 1
 end_page = None  # Process up to page 10 (modify as needed)
 batch_size = 10
-dpi = 300
+dpi = 400
 
-convert_pdfs_to_text_doc(pdf_directory, start_page=start_page, end_page=end_page, batch_size=batch_size, dpi=dpi)
+convert_pdfs_to_text_doc(
+    pdf_directory,
+    start_page=start_page,
+    end_page=end_page,
+    batch_size=batch_size,
+    dpi=dpi,
+)
