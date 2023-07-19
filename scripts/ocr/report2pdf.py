@@ -8,8 +8,7 @@ import pandas as pd
 
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
-from azure.core.exceptions import HttpResponseError
-import azure 
+import azure
 
 from docx import Document
 
@@ -56,7 +55,7 @@ class DocClient:
             results = []
 
             # Update the range from 10 to 5.
-            for i in range(0, total_pages, 10):  
+            for i in range(0, total_pages, 10):
                 pdf_writer = PdfFileWriter()
                 for j in range(i, min(i + 10, total_pages)):
                     pdf_writer.addPage(pdf.getPage(j))
@@ -64,7 +63,7 @@ class DocClient:
                 pdf_bytes = io.BytesIO()
                 pdf_writer.write(pdf_bytes)
                 pdf_bytes.seek(0)
-                
+
                 try:
                     poller = self.client.begin_analyze_document(
                         "prebuilt-document", document=pdf_bytes.read()
@@ -87,7 +86,7 @@ class DocClient:
     def process(self, pdf_path):
         outname = os.path.basename(pdf_path).replace(".pdf", "")
         outstring = os.path.join(
-            "../../data/convictions/evaluate/reports", "{}.docx".format(outname)
+            "../../data/", "{}.docx".format(outname)
         )
         outpath = os.path.abspath(outstring)
         if os.path.exists(outpath):

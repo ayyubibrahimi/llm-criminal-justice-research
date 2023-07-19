@@ -83,10 +83,6 @@ def create_db_from_text_files(text_directory, embeddings) -> FAISS:
 
 
 def get_response_from_query(db, query, k=3):
-    """
-    text-davinci-003 can handle up to 4097 tokens. Setting the chunksize to 1000 and k to 4 maximizes
-    the number of tokens to analyze.
-    """
     logger.info("Performing query...")
     docs = db.similarity_search(query, k=k)
     docs_page_content = " ".join([d.page_content for d in docs])
@@ -134,7 +130,7 @@ queries = [
 
 def answer_query_for_each_doc(embeddings) -> None:
     doc_directory = (
-        r"../../data/convictions/v1/testimony"  # Update the directory path accordingly
+        r"../../data/convictions/v1/testimony" 
     )
 
     for file_name in os.listdir(doc_directory):
@@ -149,7 +145,7 @@ def answer_query_for_each_doc(embeddings) -> None:
             else:
                 db, faiss_index_path = create_db_from_text_files(
                     doc_directory, embeddings
-                )  # Pass doc_directory
+                )  
 
             for query in queries:
                 response, _ = get_response_from_query(db, query)

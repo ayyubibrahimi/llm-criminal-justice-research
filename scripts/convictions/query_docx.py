@@ -101,7 +101,7 @@ def extract_officer_data(formatted_response):
             if len(split_line) > 1:
                 officer_context = split_line[1].strip()
             else:
-                officer_context = ""  # Or any default value you want
+                officer_context = ""  
             officer_data.append(
                 {
                     "Officer Name": officer_name,
@@ -201,7 +201,6 @@ def answer_query_for_each_doc(embeddings):
                 print(textwrap.fill(str(officer_data), width=85))
                 print()
 
-            ### need to handle for multiple titles associated with a name
 
             output_df = pd.DataFrame(output_data)
             officer_title_df = output_df[

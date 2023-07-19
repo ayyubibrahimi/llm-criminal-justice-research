@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-import pdf2image  
-import azure 
+import pdf2image
+import azure
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from msrest.authentication import CognitiveServicesCredentials
 from docx import Document
@@ -10,7 +10,7 @@ import time
 import logging
 
 
-doc_directory = "../../data/convictions/evaluate/transcripts"
+doc_directory = "../../data/626"
 
 
 def getcreds():
@@ -21,9 +21,7 @@ def getcreds():
 
 class DocClient:
     def __init__(self, endpoint, key):
-        self.client = ComputerVisionClient(
-            endpoint, CognitiveServicesCredentials(key)
-        )
+        self.client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
 
     def close(self):
         self.client.close()
@@ -32,73 +30,71 @@ class DocClient:
         contents = {
             "page": [],
             "content": [],
-            "confidence": [],  
+            "confidence": [],
         }
 
         for read_result in result.analyze_result.read_results:
             lines = read_result.lines
-            # Sort lines by bounding box's Y-axis (The bounding box format is [x1, y1, x2, y2, x3, y3, x4, y4])
             lines.sort(key=lambda line: line.bounding_box[1])
 
             for line in lines:
-                contents["page"].append(read_result.page) # Use read_result.page to get the page number
-                contents["content"].append(' '.join([word.text for word in line.words]))
-                # Add average confidence of the words in the line
-                contents["confidence"].append(sum([word.confidence for word in line.words]) / len(line.words))
+                contents["page"].append(read_result.page)
+                contents["content"].append(" ".join([word.text for word in line.words]))
+                contents["confidence"].append(
+                    sum([word.confidence for word in line.words]) / len(line.words)
+                )
 
         return pd.DataFrame(contents)
 
-
-    
     def pdf2df(self, pdf_path):
         with open(pdf_path, "rb") as file:
             pdf_data = file.read()
 
-            num_pages = pdf2image.pdfinfo_from_bytes(pdf_data)['Pages']
+            num_pages = pdf2image.pdfinfo_from_bytes(pdf_data)["Pages"]
 
             results = []
             for i in range(num_pages):
                 try:
-                    image = pdf2image.convert_from_bytes(pdf_data, dpi=300, first_page=i+1, last_page=i+1)[0]
+                    image = pdf2image.convert_from_bytes(
+                        pdf_data, dpi=300, first_page=i + 1, last_page=i + 1
+                    )[0]
 
                     img_byte_arr = BytesIO()
-                    image.save(img_byte_arr, format='PNG')
+                    image.save(img_byte_arr, format="PNG")
 
                     img_byte_arr.seek(0)
                     ocr_result = self.client.read_in_stream(img_byte_arr, raw=True)
+                    operation_id = ocr_result.headers["Operation-Location"].split("/")[
+                        -1
+                    ]
 
-                    # Get operation_id from the response headers
-                    operation_id = ocr_result.headers["Operation-Location"].split("/")[-1]
-
-                    # Keep checking the result until it's ready
                     while True:
                         result = self.client.get_read_result(operation_id)
 
-                        if result.status.lower() not in ['notstarted', 'running']:
+                        if result.status.lower() not in ["notstarted", "running"]:
                             break
 
                         time.sleep(1)
 
-                    if result.status.lower() == 'failed':
+                    if result.status.lower() == "failed":
                         logging.error(f"OCR failed for page {i+1} of file {pdf_path}")
                         continue
-                    
+
                     df_results = self.extract_content(result)
                     results.append(df_results)
                 except azure.core.exceptions.HttpResponseError as e:
-                    logging.error(f"Error processing page {i+1} of file {pdf_path}: {e}")
+                    logging.error(
+                        f"Error processing page {i+1} of file {pdf_path}: {e}"
+                    )
                     continue
 
             combined_results = pd.concat(results)
 
             return combined_results
 
-
     def process(self, pdf_path):
         outname = os.path.basename(pdf_path).replace(".pdf", "")
-        outstring = os.path.join(
-            "../../data/convictions/evaluate/transcripts", "{}.docx".format(outname)
-        )
+        outstring = os.path.join("../../data/transcripts", "{}.docx".format(outname))
         outpath = os.path.abspath(outstring)
         if os.path.exists(outpath):
             logging.info(f"skipping {outpath}, file already exists")
@@ -108,16 +104,13 @@ class DocClient:
         results = self.pdf2df(pdf_path)
         logging.info(f"writing to {outpath}")
 
-        # Create a new Document
         doc = Document()
-        # Group the results by page
-        for page, group in results.groupby('page'):
-            # Join all lines in the same page and add as a paragraph to the document
-            doc.add_paragraph('\n'.join(group['content'].tolist()))
-            # Add page separator
-            doc.add_paragraph('\n' + '-'*10 + f' End of Page {page} ' + '-'*10 + '\n')
+        for page, group in results.groupby("page"):
+            doc.add_paragraph("\n".join(group["content"].tolist()))
+            doc.add_paragraph(
+                "\n" + "-" * 10 + f" End of Page {page} " + "-" * 10 + "\n"
+            )
 
-        # Save the Document
         doc.save(outpath)
 
         return outpath
@@ -129,9 +122,8 @@ if __name__ == "__main__":
     logger.setLevel(logging.INFO)
     azurelogger.setLevel(logging.ERROR)
 
-    # Create output directory if it does not exist
-    if not os.path.exists("../../data/convictions/evaluate/transcripts"):
-        os.makedirs("../../data/convictions/evaluate/transcripts")
+    if not os.path.exists("../../data"):
+        os.makedirs("../../data")
 
     endpoint, key = getcreds()
     client = DocClient(endpoint, key)
