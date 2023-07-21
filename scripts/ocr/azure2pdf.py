@@ -10,7 +10,7 @@ import time
 import logging
 
 
-doc_directory = "../../data/626"
+doc_directory = "../../data/convictions/transcripts"
 
 
 def getcreds():
@@ -56,7 +56,7 @@ class DocClient:
             for i in range(num_pages):
                 try:
                     image = pdf2image.convert_from_bytes(
-                        pdf_data, dpi=300, first_page=i + 1, last_page=i + 1
+                        pdf_data, dpi=500, first_page=i + 1, last_page=i + 1
                     )[0]
 
                     img_byte_arr = BytesIO()
@@ -94,7 +94,7 @@ class DocClient:
 
     def process(self, pdf_path):
         outname = os.path.basename(pdf_path).replace(".pdf", "")
-        outstring = os.path.join("../../data/transcripts", "{}.docx".format(outname))
+        outstring = os.path.join("../../data/convictions/transcripts", "{}.docx".format(outname))
         outpath = os.path.abspath(outstring)
         if os.path.exists(outpath):
             logging.info(f"skipping {outpath}, file already exists")
@@ -122,8 +122,8 @@ if __name__ == "__main__":
     logger.setLevel(logging.INFO)
     azurelogger.setLevel(logging.ERROR)
 
-    if not os.path.exists("../../data"):
-        os.makedirs("../../data")
+    if not os.path.exists("../../data/convictions/transcripts"):
+        os.makedirs("../../data/convictions/transcripts")
 
     endpoint, key = getcreds()
     client = DocClient(endpoint, key)
