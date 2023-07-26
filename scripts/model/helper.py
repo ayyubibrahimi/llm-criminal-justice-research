@@ -131,46 +131,6 @@ def get_response_from_query(db, query, k):
     return token_count
 
 
-def clean_name(officer_name):
-    return re.sub(
-        r"(Detective|Officer|Deputy|Captain|[CcPpLl]|Sergeant|Lieutenant|Techn?i?c?i?a?n?|Investigator)\.?\s+",
-        "",
-        officer_name,
-    )
-
-
-def extract_officer_data(formatted_response):
-    officer_data = []
-    response_lines = formatted_response.split("\n")
-
-    for line in response_lines:
-        if line.startswith("Officer Name"):
-            officer_name = line.split(":", 1)[1].strip()
-            officer_title = re.search(
-                r"(Detective|Officer|Deputy|Captain|[CcPpLl]|Sergeant|Lieutenant|Techn?i?c?i?a?n?|Investigator)\.?",
-                officer_name,
-            )
-            if officer_title:
-                officer_title = officer_title.group()
-            else:
-                officer_title = ""
-            officer_name = clean_name(officer_name)
-        elif line.startswith("Officer Context"):
-            split_line = line.split(":", 1)
-            if len(split_line) > 1:
-                officer_context = split_line[1].strip()
-            else:
-                officer_context = ""
-            officer_data.append(
-                {
-                    "Officer Name": officer_name,
-                    "Officer Context": officer_context,
-                    "Officer Title": officer_title,
-                }
-            )
-
-    return officer_data
-
 
 def summarize_context(context):
     model = Summarizer()
