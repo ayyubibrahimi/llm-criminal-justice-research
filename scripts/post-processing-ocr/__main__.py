@@ -15,8 +15,13 @@ async def process_all_files(api_key, question, input_dir):
 
 def main():
     api_key = ""
-    question = "This is a court transcript that was OCRd. As you can tell, the OCR has messed up for the formatting so that the document no longer reads like a court transcript. Use your knowledge of court transcripts to re-write this document so that it is formatted correctly"
-    input_dir = "pdf"  
+
+    question = """This is a court transcript that was OCRd. As you can tell, 
+                  the OCR has messed up for the formatting so that the document no longer reads like a court transcript. 
+                  Use your knowledge of court transcripts to re-write this document so that it is formatted correctly.
+                """
+    
+    input_dir = "docs"  
 
     asyncio.run(process_all_files(api_key, question, input_dir))
 

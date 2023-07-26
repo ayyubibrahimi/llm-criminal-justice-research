@@ -6,3 +6,6 @@ __pycache__
 *.docx
 *.pdf
 data/
+archive/
+docs/
+archive-ocr/

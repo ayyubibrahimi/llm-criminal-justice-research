@@ -1,16 +1,12 @@
 import os
 import pandas as pd
 import pdf2image
-import azure
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from msrest.authentication import CognitiveServicesCredentials
 from docx import Document
 from io import BytesIO
 import time
 import logging
-
-
-doc_directory = "../../data/convictions/transcripts"
 
 
 def getcreds():
@@ -94,7 +90,7 @@ class DocClient:
 
     def process(self, pdf_path):
         outname = os.path.basename(pdf_path).replace(".pdf", "")
-        outstring = os.path.join("../../data/convictions/transcripts", "{}.docx".format(outname))
+        outstring = os.path.join(f_path, "{}.docx".format(outname))
         outpath = os.path.abspath(outstring)
         if os.path.exists(outpath):
             logging.info(f"skipping {outpath}, file already exists")
@@ -114,27 +110,3 @@ class DocClient:
         doc.save(outpath)
 
         return outpath
-
-
-if __name__ == "__main__":
-    logger = logging.getLogger()
-    azurelogger = logging.getLogger("azure")
-    logger.setLevel(logging.INFO)
-    azurelogger.setLevel(logging.ERROR)
-
-    if not os.path.exists("../../data/convictions/transcripts"):
-        os.makedirs("../../data/convictions/transcripts")
-
-    endpoint, key = getcreds()
-    client = DocClient(endpoint, key)
-
-    files = [
-        f
-        for f in os.listdir(doc_directory)
-        if os.path.isfile(os.path.join(doc_directory, f))
-    ]
-    logging.info(f"starting to process {len(files)} files")
-    for file in files:
-        client.process(os.path.join(doc_directory, file))
-
-    client.close()
