@@ -9,3 +9,8 @@ data/
 archive/
 docs/
 archive-ocr/
+.DS_Store
+*.json
+write/
+writing/
+llm-itearations/
