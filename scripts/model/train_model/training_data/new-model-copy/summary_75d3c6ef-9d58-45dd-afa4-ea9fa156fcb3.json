@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: On the morning of March 15th, Lieutenant Anne Carter was the first to arrive at the crime scene, followed shortly by Detective Mark Reynolds and Officer Timothy Moore. Due to the sensitive nature of the scene, Technician Emily Johnson arrived to assist with the collection of evidence. Meanwhile, Patrol Officer Ryan O'Malley maintained the perimeter. At approximately 09:45 AM, Sergeant Tom Bradley briefed the media on the situation. Criminalist Dr. Lisa Chung advised on the forensic analysis, while Coroner Dr. Jason Schmidt confirmed the time of death. During the investigation, Deputy Sarah Collins interviewed several witnesses who saw a suspicious vehicle near the vicinity. At the same time, Captain Michael Sullivan reviewed the security footage from nearby establishments."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Lieutenant Anne CarterOfficer Context: Was the first law enforcement personnel to arrive at the crime scene.Officer Role: LieutenantOfficer Name: Detective Mark ReynoldsOfficer Context: Arrived at the crime scene following Lieutenant Anne Carter.Officer Role: DetectiveOfficer Name: Officer Timothy MooreOfficer Context: Was present at the crime scene along with other law enforcement personnel.Officer Role: OfficerOfficer Name: Technician Emily JohnsonOfficer Context: Arrived to assist with the collection of evidence at the crime scene.Officer Role: TechnicianOfficer Name: Patrol Officer Ryan O'MalleyOfficer Context: Maintained the perimeter around the crime scene.Officer Role: Patrol OfficerOfficer Name: Sergeant Tom BradleyOfficer Context: Briefed the media on the situation regarding the crime scene.Officer Role: SergeantOfficer Name: Criminalist Dr. Lisa ChungOfficer Context: Provided advice on forensic analysis related to the crime scene.Officer Role: CriminalistOfficer Name: Coroner Dr. Jason SchmidtOfficer Context: Confirmed the time of death at the crime scene.Officer Role: CoronerOfficer Name: Deputy Sarah CollinsOfficer Context: Interviewed witnesses who observed a suspicious vehicle near the vicinity of the crime scene.Officer Role: DeputyOfficer Name: Captain Michael SullivanOfficer Context: Reviewed security footage from nearby establishments as part of the investigation.Officer Role: Captain"
+        }
+    ]
+}

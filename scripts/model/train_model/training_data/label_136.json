@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name:  I will derive this data from the following paragraph: CASE REPORT: #G-7891-TL DATE: 11/23/35  The quiet town of Pineville was shocked when the Pineville Art Museum reported the theft of the famous painting Whispering Meadows. The painting, valued at over $10 million, disappeared during the museum's annual gala.  LAW ENFORCEMENT ENGAGEMENT:  LEAD DETECTIVE: Detective A. B. C. York has been appointed to spearhead the investigation. Renowned for solving high-profile theft cases, Detective York's skills will be paramount. FORENSIC SPECIALIST: Detective D. E. F. Green, an expert in art theft forensics, is currently examining the frame and wall where the painting was hung, searching for clues. SECURITY DETAILS: Captain G. H. I. Rowe is coordinating with the museum's security staff. They are studying CCTV footage to identify any suspicious activities. PATROL OFFICER: Patrol Officer J. K. L. Turner, who was present near the museum during the gala, noticed a high-end car speeding away. The vehicle's description has been circulated. ART FRAUD INVESTIGATOR: Detective M. N. O. Wells, with extensive experience in art-related crimes, is reaching out to potential black market contacts to gather information. The Pineville community is rallying together, urging anyone with information to come forward.  "
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Detective A. B. C. York  \nOfficer Context: Detective York is leading the investigation into the painting theft.  \nOfficer Role: Detective \n\nOfficer Name: Detective D. E. F. Green  \nOfficer Context: Detective Green is specializing in art theft forensics for this case.  \nOfficer Role: Detective \n\nOfficer Name: Captain G. H. I. Rowe  \nOfficer Context: Captain Rowe is working on the security details and analyzing CCTV footage.  \nOfficer Role: Captain \n\nOfficer Name: Patrol Officer J. K. L. Turner  \nOfficer Context: Patrol Officer Turner reported a suspicious vehicle near the museum on the night of the theft.  \nOfficer Role: Patrol Officer \n\nOfficer Name: Detective M. N. O. Wells  \nOfficer Context: Detective Wells is an art fraud investigator, probing into potential black market connections.  \nOfficer Role: Detective"
+        }
+    ]
+}

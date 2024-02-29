@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name:  I will derive this data from the following paragraph: EYEWITNESS REPORT: #T-9854-JK DATE: 05/06/24  On the mentioned date, around 9:15 AM, a bank heist took place at City Central Bank, Downtown. SECURITY RESPONSE: (A) BANK GUARDS: Sgt. T. U. V. Ramirez and Sgt. W. X. Y. Henderson. (B) LOCAL POLICE RESPONDENTS: Detective A. B. C. Drake and Officer D. E. F. Green. (C) CRIME SCENE TEAM: Criminalist G. H. I. Strauss and Technician J. K. L. Ford.  Sgt. Ramirez attempted to subdue one of the robbers but was overpowered. Detective Drake was quickly on the scene, gathering initial facts, while Officer Green worked on crowd control. Criminalist Strauss collected evidence, including fingerprints and shell casings, and Technician Ford photographed the scene meticulously.  NOTED: The heist was executed by three masked individuals, currently unidentified. Any information leading to their capture will be rewarded. URGENT: Forensic report needed ASAP.  "
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Sgt. T. U. V. Ramirez  \nOfficer Context: Sgt. Ramirez attempted to subdue one of the robbers but was overpowered.  \nOfficer Role: Sergeant \n\nOfficer Name: Sgt. W. X. Y. Henderson  \nOfficer Context: (mentioned as one of the bank guards)  \nOfficer Role: Sergeant \n\nOfficer Name: Detective A. B. C. Drake  \nOfficer Context: Detective Drake was quickly on the scene, gathering initial facts.  \nOfficer Role: Detective \n\nOfficer Name: Officer D. E. F. Green  \nOfficer Context: Officer Green worked on crowd control.  \nOfficer Role: Officer \n\nOfficer Name: Criminalist G. H. I. Strauss  \nOfficer Context: Criminalist Strauss collected evidence, including fingerprints and shell casings.  \nOfficer Role: Criminalist \n\nOfficer Name: Technician J. K. L. Ford  \nOfficer Context: Technician Ford photographed the scene meticulously.  \nOfficer Role: Technician"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: The scene, once arrived upon by Det. Jonathan Kellerman, showed multiple points of entry that could be potential ingress for the culprits. Officer Daniella M0rris, who was the first to respond to the d15tress call, secured the perimeter, ensuring no further contamination of the crime scene. Sgt. Marcus Teller made notes of the vehicle's position, which was abandoned near the site. Criminalist Jenna Bradshaw's preliminary assessment suggested that the perpetrators might have had a familiarity with the area. Investigator Dr. Luisa Melendez documented the injuries to the victim, which were suggestive of personal animosity. Technician Gary Price was tasked with collecting all electronic devices for further analysis. C0roner Dr. Adrian Shaw pronounced the time of death to be approximately 2:30 AM, based on the lividity stages observed. Capt. Elaine Summers reviewed the initial reports and directed her team to canvass the neighborhood for any potential witnesses or surveillance footage that might have caught the incident."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Det. Jonathan KellermanOfficer Context: Arrived at the scene and noted multiple potential points of entry for the culprits.Officer Role: DetectiveOfficer Name: Officer Daniella MorrisOfficer Context: Was the first responder to the distress call and secured the crime scene perimeter.Officer Role: OfficerOfficer Name: Sgt. Marcus TellerOfficer Context: Made notes regarding the position of a vehicle abandoned near the crime scene.Officer Role: SergeantOfficer Name: Criminalist Jenna BradshawOfficer Context: Gave a preliminary assessment suggesting the perpetrators' familiarity with the area.Officer Role: CriminalistOfficer Name: Dr. Luisa MelendezOfficer Context: Documented the injuries to the victim, indicative of personal animosity.Officer Role: InvestigatorOfficer Name: Technician Gary PriceOfficer Context: Collected all electronic devices from the scene for analysis.Officer Role: TechnicianOfficer Name: Dr. Adrian ShawOfficer Context: Pronounced the time of death based on observed lividity stages.Officer Role: CoronerOfficer Name: Capt. Elaine SummersOfficer Context: Reviewed initial reports and directed the team to search for witnesses or surveillance footage.Officer Role: Captain"
+        }
+    ]
+}

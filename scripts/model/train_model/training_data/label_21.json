@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract data concerning law enforcement personnel. The output will detail: 1) The name of a law enforcement individual. The person's name needs to be prefixed with one of these titles indicating their law enforcement position: Det., Sgt., Lt., Capt., Dep., Off., Patrol Off., Criminalist, Tech., Coroner, or Dr. Start each name with 'Officer Name: '. I will be sourcing this data from this paragraph: On a foggy evening, DET. Thompson, DET. Evans, and DET. White convened at the warehouse where OFF. Norton and OFF. Newman were monitoring tasks. PATROL OFF. Davis identified an irregularity on the west side and promptly informed LT. Hayes. SGT. Green, with DEP. Stevenson, was ensuring the main gate was secure. CAPT. Pierce and CAPT. Gonzalez coordinated from the mobile command unit. Concurrently, TECH. Brown and CRIMINALIST Lewis gathered evidence. Dr. Wallace stood by for forensic evaluations."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: DET. Thompson  Officer Context: On a foggy evening, DET. Thompson convened at the warehouse. Officer Role: Detective Officer Name: DET. Evans  Officer Context: On a foggy evening, DET. Evans met up at the warehouse. Officer Role: Detective Officer Name: DET. White  Officer Context: On a foggy evening, DET. White was at the warehouse. Officer Role: Detective Officer Name: OFF. Norton  Officer Context: OFF. Norton was monitoring tasks at the warehouse. Officer Role: Officer Officer Name: OFF. Newman  Officer Context: OFF. Newman was monitoring tasks at the warehouse. Officer Role: Officer Officer Name: PATROL OFF. Davis  Officer Context: PATROL OFF. Davis identified an irregularity on the west side. Officer Role: Patrol Officer Officer Name: LT. Hayes  Officer Context: Informed by PATROL OFF. Davis about the west side irregularity. Officer Role: Lieutenant Officer Name: SGT. Green  Officer Context: SGT. Green was ensuring the main gate's security. Officer Role: Sergeant Officer Name: DEP. Stevenson  Officer Context: DEP. Stevenson was with SGT. Green securing the gate. Officer Role: Deputy Officer Name: CAPT. Pierce  Officer Context: CAPT. Pierce coordinated from the mobile command unit. Officer Role: Captain Officer Name: CAPT. Gonzalez  Officer Context: CAPT. Gonzalez was in the mobile command unit. Officer Role: Captain Officer Name: TECH. Brown  Officer Context: TECH. Brown was gathering evidence. Officer Role: Technician Officer Name: CRIMINALIST Lewis  Officer Context: CRIMINALIST Lewis collected evidence. Officer Role: Criminalist Officer Name: Dr. Wallace  Officer Context: Dr. Wallace was prepared for forensic evaluations. Officer Role: Forensic Expert"
+        }
+    ]
+}

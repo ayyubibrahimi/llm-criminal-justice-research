@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: Evening of December 8, DET. Julia STONE and Sgt. Peter Walker. Illegal trade, maybe? 456 Elm St. Backup! RAPID. Officer Luke THOMPSON, very quick. Tense moments passed, things happened. Stone, Thompson - HANDEDLY Detained? Persons in question."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: DET. Julia STONE Officer Context: Evening of December 8, DET. Julia STONE and Sgt. Peter Walker. Illegal trade, maybe? Officer Role: Detective  Officer Name: Sgt. Peter Walker Officer Context: Evening of December 8, DET. Julia STONE and Sgt. Peter Walker. Illegal trade, maybe? Officer Role: Sergeant  Officer Name: Officer Luke THOMPSON Officer Context: Backup! RAPID. Officer Luke THOMPSON, very quick. Officer Role: Officer"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: it was messy and half the evidence was gon. still, detectve Jose Ramirez and sergant Sam Brown were on it. Didn't help that liutenant Jackson arrived late, lookin all lost and stuff. cptain Beck said 'get your act together'. Patrol oficer Jane was at the coffee shop, heard gunshots. ran over asap. technican Alex couldn't get the cam to work. ugh. coronor Dr. Rick found somethin odd bout the victim's shoes. Why? in the alleyway, oficer Tom and detective Wendy were chattin, ignoring some importnt witnesses. DOCUMENT STUFF; Westbrook police thingy, ID: 1234. Some report by Sergeant Anika. not that detailed tho"
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Detective Jose Ramirez Officer Context: Noted the messy scene and missing evidence. Officer Role: Detective  Officer Name: Sergeant Sam Brown Officer Context: Arrived at the scene with Jose Ramirez. Officer Role: Sergeant  Officer Name: Liuetenant Jackson Officer Context: Arrived late and seemed confused. Officer Role: Lieutenant  Officer Name: Captain Beck Officer Context: Told others to 'get your act together'. Officer Role: Captain  Officer Name: Patrol Oficer Jane Officer Context: Was at the coffee shop, heard gunshots, and responded immediately. Officer Role: Patrol Officer  Officer Name: Technican Alex Officer Context: Had difficulty getting the camera to work. Officer Role: Technician  Officer Name: Coronor Dr. Rick Officer Context: Made an observation regarding the victim's shoes. Officer Role: Coroner  Officer Name: Officer Tom Officer Context: Found in the alleyway, chatting with Detective Wendy. Officer Role: Officer  Officer Name: Detective Wendy Officer Context: Was with Officer Tom, seemingly ignoring key witnesses. Officer Role: Detective  Officer Name: Sergeant Anika Officer Context: Authored a report, though it was not detailed. Officer Role: Sergeant"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph:  During the dawn hours, DET. Martinez, DET. Harris, and DET. Bennett kept an eye on the villa. OFF. James, OFF. Walters, and OFF. King ensured the perimeter was secure. LT. Richards made a call to SGT. Moore and SGT. Black for a quick discussion. CAPT. Turner was liaising with the town's top cop. TECH. Carter tried to locate the source of some mysterious calls, whereas CRIMINALIST Robinson and Dr. Peterson went through evidence samples."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: DET. Martinez  Officer Context: During the dawn hours, DET. Martinez kept an eye on the villa. Officer Role: Detective Officer Name: DET. Harris  Officer Context: DET. Harris was observing the villa in the early hours. Officer Role: Detective Officer Name: DET. Bennett  Officer Context: Alongside other detectives, DET. Bennett was watching the villa. Officer Role: Detective Officer Name: OFF. James  Officer Context: OFF. James ensured the perimeter was secure. Officer Role: Officer Officer Name: OFF. Walters  Officer Context: OFF. Walters was on perimeter security duty. Officer Role: Officer Officer Name: OFF. King  Officer Context: OFF. King helped in securing the villa's perimeter. Officer Role: Officer Officer Name: LT. Richards  Officer Context: LT. Richards made a call for a quick discussion. Officer Role: Lieutenant Officer Name: SGT. Moore  Officer Context: LT. Richards called SGT. Moore for a talk. Officer Role: Sergeant Officer Name: SGT. Black  Officer Context: SGT. Black was also part of the discussion initiated by LT. Richards. Officer Role: Sergeant Officer Name: CAPT. Turner  Officer Context: CAPT. Turner was liaising with the town's top cop. Officer Role: Captain Officer Name: TECH. Carter  Officer Context: TECH. Carter was tracking mysterious calls. Officer Role: Technician Officer Name: CRIMINALIST Robinson  Officer Context: CRIMINALIST Robinson went through evidence samples. Officer Role: Criminalist Officer Name: Dr. Peterson  Officer Context: Alongside CRIMINALIST Robinson, Dr. Peterson examined the evidence. Officer Role: Dr. (Forensics Expert, implied by context)"
+        }
+    ]
+}

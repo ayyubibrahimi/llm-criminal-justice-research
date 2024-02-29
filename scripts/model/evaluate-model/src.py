@@ -13,6 +13,7 @@ title_patterns = [
     r"\bDetective\b",
     r"\bDetectives\b",
     r"\bOfficer\b",
+    r"\bOfficers\b",
     r"\bSgt\.\b",
     r"\bLieutenant\b",
     r"\bSergeant\b",
@@ -24,11 +25,37 @@ title_patterns = [
     r"\b\(?Criminalist\)?\b",
     r"\b\(?Photographer\)?\b",
     r"\bPolice Officer\b",
+    r"\bCrime Lab Technician\b",
+     r"\bLt\.\b",
+    r"\bLes\.\b",
+    r"\bDet\.\b",
+    r"\bSat\.\b",
+    r"\bCet\.\b",
+    r"\bDetective\b",
+    r"\bDetectives\b",
+    r"\bOfficer\b",
+    r"\bSgt\.\b",
+    r"\bLieutenant\b",
+    r"\bSergeant\b",
+    r"\bCaptain\b",
+    r"\bCorporal\b",
+    r"\bDeputy\b",
+    r"\bOfc\.\b",
+    r"\b\(?Technician\)?\b",
+    r"\b\(?Criminalist\)?\b",
+    r"\b\(?Photographer\)?\b",
+    r"\bPolice Officer\b",
+    r"\bUNIT \d+\b",  
+    r"\bMOUNTED OFFICERS\b",
+    r"\bCrime Lab Technician\b",
+    r"Officer Context:",
+    r"P/O",
+    r"Police"
 ]
 
 
 def split_names(row):
-    split_patterns = [r" and ", r",", r":"]
+    split_patterns = [r" and ", r" ?, ?", r" ?: ?", r" ?& ?"]
     for pattern in split_patterns:
         if re.search(pattern, row):
             return re.split(pattern, row)
@@ -118,13 +145,35 @@ def preprocess_data(dfa_path, dfb_path, title_patterns):
     return df
 
 
-def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshold=0.7):
+def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshold=0.5):
+    
+    """
+    Compute similarity metrics between extracted officer names and ground truth names using 
+    Levenshtein distance across multiple iterations.
+
+    Parameters:
+    - df (DataFrame): The DataFrame containing the officer names and other relevant columns.
+    - all_ground_truth_names (set of str): The set of all ground truth names against which the extracted names will be matched.
+    - levenshtein_threshold (float, default=0.7): The threshold of similarity ratio above which names are considered a match.
+
+    Returns:
+    - results_df (DataFrame): A DataFrame containing various similarity metrics for each iteration such as precision, 
+                              recall, f1_score, and others. It also includes cumulative metrics and metrics after 6 iterations.
+
+    Note:
+    The function first identifies potential matches based on the Levenshtein similarity ratio. 
+    For each extracted name, it finds the ground truth name with the highest similarity and checks 
+    if this similarity is above the given threshold. If so, the names are considered a match. The function 
+    then computes precision, recall, and F1 score metrics for each iteration, as well as cumulative metrics.
+    """
+    
     results_levenshtein = []
     all_matched_across_iterations = set()
     all_extracted_across_iterations = set()
     cumulative_matched_names = set()
 
     for iteration in range(1, 7):
+        beta = 2
         extracted_last_names = df[df["iteration"] == iteration][
             "Officer Refined Adjusted Last Name"
         ].unique()
@@ -141,7 +190,6 @@ def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshol
             if max_similarity > levenshtein_threshold:
                 matched_last_names[name] = best_match
 
-        # Metrics for the current iteration
         current_TP = len(
             set(matched_last_names.values()).intersection(all_ground_truth_names)
         )
@@ -162,10 +210,8 @@ def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshol
             else 0
         )
 
-        # Update the cumulative set of matched names
         cumulative_matched_names.update(matched_last_names.values())
 
-        # Cumulative metrics
         cumulative_TP = len(
             cumulative_matched_names.intersection(all_ground_truth_names)
         )
@@ -188,6 +234,14 @@ def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshol
             else 0
         )
 
+        cumulative_f_beta_score = (
+            (1 + beta**2)
+            * (cumulative_precision * cumulative_recall)
+            / ((beta**2 * cumulative_precision) + cumulative_recall)
+            if (cumulative_precision + cumulative_recall) > 0
+            else 0
+        )
+
         results_levenshtein.append(
             {
                 "iteration": iteration,
@@ -207,46 +261,47 @@ def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshol
                 "cumulative_precision": cumulative_precision,
                 "cumulative_recall": cumulative_recall,
                 "cumulative_f1_score": cumulative_f1_score,
+                "cumulative_f_beta_score": cumulative_f_beta_score,
+
             }
         )
 
         all_matched_across_iterations.update(matched_last_names.values())
         all_extracted_across_iterations.update(extracted_last_names)
 
-    # Metrics after 6 iterations
-    total_TP = len(all_matched_across_iterations.intersection(all_ground_truth_names))
-    total_FP = len(all_extracted_across_iterations) - total_TP
-    total_precision = total_TP / (total_TP + total_FP) if total_TP + total_FP > 0 else 0
-    total_recall = (
-        total_TP / len(all_ground_truth_names) if len(all_ground_truth_names) > 0 else 0
-    )
-    total_f1_score = (
-        2 * (total_precision * total_recall) / (total_precision + total_recall)
-        if total_precision + total_recall > 0
-        else 0
-    )
+    # # Metrics after 6 iterations
+    # total_TP = len(all_matched_across_iterations.intersection(all_ground_truth_names))
+    # total_FP = len(all_extracted_across_iterations) - total_TP
+    # total_precision = total_TP / (total_TP + total_FP) if total_TP + total_FP > 0 else 0
+    # total_recall = (
+    #     total_TP / len(all_ground_truth_names) if len(all_ground_truth_names) > 0 else 0
+    # )
+    # total_f1_score = (
+    #     2 * (total_precision * total_recall) / (total_precision + total_recall)
+    #     if total_precision + total_recall > 0
+    #     else 0
+    # )
 
-    # Calculate F-beta score
-    beta = 2
-    total_f_beta_score = (
-        (1 + beta**2)
-        * (total_precision * total_recall)
-        / ((beta**2 * total_precision) + total_recall)
-        if (total_precision + total_recall) > 0
-        else 0
-    )
+    # # Calculate F-beta score
+    # total_f_beta_score = (
+    #     (1 + beta**2)
+    #     * (total_precision * total_recall)
+    #     / ((beta**2 * total_precision) + total_recall)
+    #     if (total_precision + total_recall) > 0
+    #     else 0
+    # )
 
     unmatched_ground_truth_names_after_6_iterations = (
         set(all_ground_truth_names) - all_matched_across_iterations
     )
 
     results_df = pd.DataFrame(results_levenshtein)
-    results_df.loc[5, "Total True Positives After 6 Iterations"] = total_TP
-    results_df.loc[5, "Total False Positives After 6 Iterations"] = total_FP
-    results_df.loc[5, "Total Precision After 6 Iterations"] = total_precision
-    results_df.loc[5, "Total Recall After 6 Iterations"] = total_recall
-    results_df.loc[5, "Total F1 Score After 6 Iterations"] = total_f1_score
-    results_df.loc[5, "Total F-beta Score After 6 Iterations"] = total_f_beta_score
+    # results_df.loc[5, "Total True Positives After 6 Iterations"] = total_TP
+    # results_df.loc[5, "Total False Positives After 6 Iterations"] = total_FP
+    # results_df.loc[5, "Total Precision After 6 Iterations"] = total_precision
+    # results_df.loc[5, "Total Recall After 6 Iterations"] = total_recall
+    # results_df.loc[5, "Total F1 Score After 6 Iterations"] = total_f1_score
+    # results_df.loc[5, "Total F-beta Score After 6 Iterations"] = total_f_beta_score
     results_df.loc[5, "Unmatched Ground Truth Names After 6 Iterations"] = str(
         unmatched_ground_truth_names_after_6_iterations
     )
@@ -254,69 +309,29 @@ def compute_levenshtein_metrics(df, all_ground_truth_names, levenshtein_threshol
     return results_df
 
 
-def aggregate_results(df, output_name):
-    # Computing average values for the metrics across all iterations
-    avg_precision = df["precision"].mean()
-    avg_recall = df["recall"].mean()
-    avg_f1_score = df["f1_score"].mean()
-    avg_total_true_positives_6_iterations = df[
-        "Total True Positives After 6 Iterations"
-    ].mean()
-    avg_total_false_positives_6_iterations = df[
-        "Total False Positives After 6 Iterations"
-    ].mean()
-    avg_total_precision_6_iterations = df["Total Precision After 6 Iterations"].mean()
-    avg_total_recall_6_iterations = df["Total Recall After 6 Iterations"].mean()
-    avg_total_f1_score_6_iterations = df["Total F1 Score After 6 Iterations"].mean()
-    avg_total_f_beta_score_6_iterations = df[
-        "Total F-beta Score After 6 Iterations"
-    ].mean()
+def aggregate_results(df, results_df, num_of_queries):
 
-    metrics = {
-        "Avg Precision": avg_precision,
-        "Avg Recall": avg_recall,
-        "Avg F1 Score": avg_f1_score,
-        "Avg TP After 6 Iterations": avg_total_true_positives_6_iterations,
-        "Avg FP After 6 Iterations": avg_total_false_positives_6_iterations,
-        "Avg Precision After 6 Iterations": avg_total_precision_6_iterations,
-        "Avg Recall After 6 Iterations": avg_total_recall_6_iterations,
-        "Avg F1 Score After 6 Iterations": avg_total_f1_score_6_iterations,
-        "Avg F-beta Score After 6 Iterations": avg_total_f_beta_score_6_iterations,
-    }
+    file_type = args.file_type
 
-    if "allqueries" in output_name:
-        file_type = "allqueries"
-    elif "1query" in output_name:
-        file_type = "1query"
+    overall_output_file = (
+        "../../../data/wrongful-convictions/json/evaluate/output-4-og-params/overall-output.csv"
+    )
+
+    results_df["File Type"] = file_type
+    results_df["Num of Queries"] = num_of_queries
+
+    if os.path.exists(overall_output_file):
+        with open(overall_output_file, "a") as f:
+            results_df.to_csv(f, header=False, index=False)
     else:
-        file_type = "unknown"
-
-    metrics["File Type"] = file_type
-
-    overall_summary_file = "../../../data/convictions/transcripts/iterative/evaluate/output/overall-summary.csv"
-
-    if os.path.exists(overall_summary_file):
-        summary_df = pd.read_csv(overall_summary_file)
-    else:
-        summary_df = pd.DataFrame()
-        summary_df["File Type"] = []
-
-    if file_type in summary_df["File Type"].values:
-        for key, value in metrics.items():
-            if key != "File Type":
-                existing_value = summary_df.loc[
-                    summary_df["File Type"] == file_type, key
-                ].values[0]
-                summary_df.loc[summary_df["File Type"] == file_type, key] = (
-                    existing_value + value
-                ) / 2
-    else:
-        summary_df = summary_df.append(metrics, ignore_index=True)
-
-    summary_df.to_csv(overall_summary_file, index=False)
+        with open(overall_output_file, "w") as f:
+            results_df.to_csv(f, header=True, index=False)
+    return results_df
 
 
-def main(dfa_path, dfb_path, output_dir):
+
+
+def main(dfa_path, dfb_path, output_dir, file_type):
     df = preprocess_data(dfa_path, dfb_path, title_patterns)
     df["Split Officer Names"] = df["Officer Name"].apply(split_names).str[0]
     df["Officer Last Name"] = df["Split Officer Names"].apply(extract_last_name)
@@ -339,16 +354,28 @@ def main(dfa_path, dfb_path, output_dir):
             if name.strip() != ""
         ]
     )
+
+    if "_six_queries.csv" in dfa_path:
+        num_of_queries = 6
+    elif "_one_query.csv" in dfa_path:
+        num_of_queries = 1
+    else:
+        num_of_queries = None  
+
     results_df = compute_levenshtein_metrics(df, all_ground_truth_names)
     output_file_name = (
         dfa_path.split("/")[-1]
-        .replace("-allqueries.csv", "allqueries-results.csv")
-        .replace("-1query.csv", "1query-results.csv")
+        .replace("_six_queries.csv", "_six_queries-results.csv")
+        .replace("_one_query.csv", "_one_query-results.csv")
     )
     output_name = os.path.join(output_dir, output_file_name)
     os.makedirs(os.path.dirname(output_name), exist_ok=True)
     results_df.to_csv(output_name, index=False)
-    aggregate_results(results_df, output_name)
+
+    filename = os.path.basename(dfa_path)
+    results_df["filename"] = filename
+
+    aggregate_results(results_df, results_df, num_of_queries)
 
 
 if __name__ == "__main__":
@@ -362,6 +389,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output", type=str, required=True, help="Path to the output CSV file."
     )
-
+    parser.add_argument(
+        "--file-type",
+        type=str,
+        required=True,
+        help="Type of the file being processed (either 'reports' or 'transcripts').",
+    )
+    
     args = parser.parse_args()
-    main(args.input_dfa, args.input_dfb, args.output)
+    main(args.input_dfa, args.input_dfb, args.output, args.file_type)

@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: At the c0nclusion of the victiim's statement, Lieutenant Danvers was notified and he immediately requested backup from nearby precincts. Meanwhile, Officer Keri Muldoon noticed discrepancies in the witness's acc0unt and suggested further interrogation. Detect1ve Ryan Nash arrived shortly after and began processing the scene, marking evidence with his team, including Technician Leah Fischer, who meticulously photographed the area. Sergeant Patterson then arrived with the K-9 unit and started a perimeter seaarch, while Deputy Erin O'Malley maintained crowd control. At approximately 19:45 hours, Criminalist Jameson Locke reported finding a critical piece of evidence near the East wing of the building. This prompted Captain Helena Chase to call for a meeting with the chief coroner, Dr. Eliot Reid, to discuss the implications of the discovery. Patrol Officer Mason Briggs was last to arrive, securing the exits as per standard protocol."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Lieutenant DanversOfficer Context: Was notified at the conclusion of the victim's statement and requested backup.Officer Role: LieutenantOfficer Name: Officer Keri MuldoonOfficer Context: Noticed discrepancies in the witness's account, suggesting further interrogation.Officer Role: OfficerOfficer Name: Detective Ryan NashOfficer Context: Arrived at the scene and began processing it, marking evidence.Officer Role: DetectiveOfficer Name: Technician Leah FischerOfficer Context: Meticulously photographed the area as part of the evidence processing team.Officer Role: TechnicianOfficer Name: Sergeant PattersonOfficer Context: Arrived with the K-9 unit to start a perimeter search.Officer Role: SergeantOfficer Name: Deputy Erin O'MalleyOfficer Context: Maintained crowd control during the investigation.Officer Role: DeputyOfficer Name: Criminalist Jameson LockeOfficer Context: Reported finding a critical piece of evidence near the East wing of the building.Officer Role: CriminalistOfficer Name: Captain Helena ChaseOfficer Context: Called for a meeting with the chief coroner to discuss the implications of a new discovery.Officer Role: CaptainOfficer Name: Dr. Eliot ReidOfficer Context: Chief coroner called for a meeting by Captain Chase.Officer Role: CoronerOfficer Name: Patrol Officer Mason BriggsOfficer Context: Secured the exits as per standard protocol.Officer Role: Patrol Officer"
+        }
+    ]
+}

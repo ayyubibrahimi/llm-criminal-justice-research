@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: The invest1gat10n int0 the 5hooting at the corner of Marais and Polymnia revealed a complex scenari0 inv0lving multiple parties. Detective James Barker, the lead investigator, was the first to respond to the incident. Upon arrival, he found Officer Patr1ck O'Malley administering first aid to the wounded civilian. Nearby, Sergeant Lila Stone was coordinating the establishment of a perimeter to secure the area. A witness statement from Technician Alex Jensen indicated that two suspects fled the scene moments before the officers arrived. Jensen was assisting Coroner Dr. Harold Greene, who was examining another victim on the opposite sidewalk. In the meantime, Patrol Officer Rita Sanchez was canvassing the neighborhood for additional witnesses or surveillance footage that might shed light on the events. Detective Sarah Loomis arrived soon after with the forensic unit and began collecting evidence, including shell casings and fingerprints. The preliminary report suggests that there may have been an exchange of fire between rival groups, resulting in accidental injuries to passersby. Further details will emerge as the investigation continues, and all officers involved have been instructed to file detailed reports by end of the shift."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Detective James BarkerOfficer Context: Lead investigator, first to respond to the shooting incident.Officer Role: Lead InvestigatorOfficer Name: Officer Patrick O'MalleyOfficer Context: Administering first aid to the wounded civilian at the scene.Officer Role: First ResponderOfficer Name: Sergeant Lila StoneOfficer Context: Coordinating the establishment of a perimeter to secure the area.Officer Role: SergeantOfficer Name: Technician Alex JensenOfficer Context: Provided a witness statement indicating two suspects fled the scene.Officer Role: TechnicianOfficer Name: Dr. Harold GreeneOfficer Context: Examining another victim on the opposite sidewalk.Officer Role: CoronerOfficer Name: Patrol Officer Rita SanchezOfficer Context: Canvassing the neighborhood for additional witnesses or surveillance footage.Officer Role: Patrol OfficerOfficer Name: Detective Sarah LoomisOfficer Context: Arrived with the forensic unit and began collecting evidence.Officer Role: Detective"
+        }
+    ]
+}

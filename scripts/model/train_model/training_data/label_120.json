@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name:  I will derive this data from the following paragraph: INCIDENT REPORT: #PD-7512-MS DATE: 11/12/23  At approximately 7:45 PM, a disturbance was reported at the Sunny Park. Multiple reports suggested a physical altercation between a group of youths. RESPONDENTS: (A) PATROL UNIT: Officer A. B. C. Walters, Patrol Officer D. E. F. Ruiz. (B) K-9 UNIT: Deputy G. H. I. Peterson with K-9 Jax. (C) FORENSIC TEAM: Technician K. L. M. Woods and Dr. N. O. P. Torres, our city's renowned coroner.  Officer Walters was the first on the scene and attempted to diffuse the situation. Deputy Peterson arrived shortly after with K-9 Jax to assist. Patrol Officer Ruiz took statements from the gathered crowd. Meanwhile, Technician Woods documented the scene, and Dr. Torres examined one of the youths who was reported unconscious.  IMPORTANT: Backup requested at Sunny Park due to large crowd gathering. Witnesses include Mr. Robert Smith and Ms. Jane Doe. ASSIGN: VICTIM SUPPORT & VIOLENCE PREVENTION TEAM.  Updates: The unconscious youth was later identified as Timmy Johnson and was transported to the local hospital."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Officer A. B. C. Walters  \nOfficer Context: Officer Walters was the first on the scene and attempted to diffuse the situation.  \nOfficer Role: Officer \n\nOfficer Name: Patrol Officer D. E. F. Ruiz  \nOfficer Context: Patrol Officer Ruiz took statements from the gathered crowd.  \nOfficer Role: Patrol Officer \n\nOfficer Name: Deputy G. H. I. Peterson  \nOfficer Context: Deputy Peterson arrived shortly after with K-9 Jax to assist.  \nOfficer Role: Deputy \n\nOfficer Name: Technician K. L. M. Woods  \nOfficer Context: Technician Woods documented the scene.  \nOfficer Role: Technician \n\nOfficer Name: Dr. N. O. P. Torres  \nOfficer Context: Dr. Torres examined one of the youths who was reported unconscious.  \nOfficer Role: Doctor (Coroner)"
+        }
+    ]
+}

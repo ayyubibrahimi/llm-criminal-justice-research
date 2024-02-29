@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name: '. I will derive this data from the following paragraph: During the early hours of the investigation, Officer J4ckson secured the perimeter, ensuring no unauthorized personnel entered the crime scene. Meanwhile, Detective M@rshall and his partner, S3rgeant L@ne, canvassed the area for witnesses. At approximately 02:15 AM, P@trol Officer Dani3ls arrived with K9 unit R0ver to assist in the search for potential evidence. Technician H@yes, from the forensic team, meticulously collected fibers found near the victim's body, which were later analyzed by Cr1minalist P@rker. The evidence pointed to a possibility of multiple assailants. Lieutenant C00k took charge of the command post, directing officers and updating Captain J0nes on the progress of the case. C0roner Dr. Sm1th arrived on the scene to examine the body and declared the time of death to be around midnight. In the midst of the chaos, Deputy Sh3rman maintained order and logged the entry and exit of all individuals partaking in the active investigation."
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Officer J4cksonOfficer Context: Secured the perimeter of the crime scene.Officer Role: Security OfficerOfficer Name: Detective M@rshallOfficer Context: Canvassed the area for witnesses with S3rgeant L@ne.Officer Role: DetectiveOfficer Name: S3rgeant L@neOfficer Context: Assisted Detective M@rshall in canvassing the area for witnesses.Officer Role: SergeantOfficer Name: Patrol Officer Dani3lsOfficer Context: Arrived with K9 unit R0ver to search for potential evidence.Officer Role: Patrol OfficerOfficer Name: Technician H@yesOfficer Context: Collected fibers found near the victim's body for analysis.Officer Role: Forensic TechnicianOfficer Name: Criminalist P@rkerOfficer Context: Analyzed fibers collected by Technician H@yes, suggesting multiple assailants.Officer Role: CriminalistOfficer Name: Lieutenant C00kOfficer Context: Took charge of the command post and directed officers.Officer Role: LieutenantOfficer Name: Captain J0nesOfficer Context: Was updated on the progress of the case by Lieutenant C00k.Officer Role: CaptainOfficer Name: Coroner Dr. Sm1thOfficer Context: Examined the body and declared the time of death.Officer Role: CoronerOfficer Name: Deputy Sh3rmanOfficer Context: Maintained order at the scene and logged entry and exit of individuals.Officer Role: Deputy"
+        }
+    ]
+}

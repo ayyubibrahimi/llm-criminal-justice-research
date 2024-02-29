@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "As an AI assistant, my role is to meticulously analyze criminal justice documents and extract information about law enforcement personnel. The response will contain: 1) The name of a law enforcement personnel. The individual's name must be prefixed with one of the following titles to be in law enforcement: Detective, Sergeant, Lieutenant, Captain, Deputy, Officer, Patrol Officer, Criminalist, Technician, Coroner, or Dr. Please prefix the name with 'Officer Name:  I will derive this data from the following paragraph: INCIDENT REPORT: #R-2369-PL DATE: 04/16/36  The Portside City Bank experienced an attempted robbery last evening. A suspect tried to gain unauthorized access to the bank's vault but was interrupted by the alarm system.  LAW ENFORCEMENT ENGAGEMENT:  INVESTIGATION HEAD: Captain A. B. Waters is in charge of the robbery investigation, liaising directly with the bank's management. CYBERSECURITY SPECIALIST: Detective C. D. Fox is probing into any electronic breaches or hacks that could've facilitated the attempt. FORENSICS: Detective E. F. Ray is collecting and analyzing physical evidence from the scene, focusing particularly on the vault door. PATROL DETAILS: Patrol Officer G. H. Stone was the first to respond to the alarm and has provided a preliminary report. The bank has applauded the swift response from law enforcement and hopes for a quick resolution.  "
+        },
+        {
+            "role": "user",
+            "content": "Identify each individual in the transcript, by name, who are directly referred to as officers, sergeants, lieutenants, captains, detectives, homicide officers, and crime lab personnel."
+        },
+        {
+            "role": "assistant",
+            "content": "Officer Name: Captain A. B. Waters  \nOfficer Context: Captain Waters is overseeing the robbery investigation.  \nOfficer Role: Captain \n\nOfficer Name: Detective C. D. Fox  \nOfficer Context: Detective Fox is a cybersecurity specialist analyzing potential electronic breaches.  \nOfficer Role: Detective \n\nOfficer Name: Detective E. F. Ray  \nOfficer Context: Detective Ray is handling forensic evidence collection at the bank.  \nOfficer Role: Detective \n\nOfficer Name: Patrol Officer G. H. Stone  \nOfficer Context: Patrol Officer Stone was the first responder to the bank alarm.  \nOfficer Role: Patrol Officer"
+        }
+    ]
+}
